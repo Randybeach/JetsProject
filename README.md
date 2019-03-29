@@ -6,7 +6,7 @@
 
 TODO: 
 
-###Concepts and Technologies Used
+### Concepts and Technologies Used
 
 * Object Oriented Design
 
@@ -15,5 +15,5 @@ TODO:
   * Inheritance
   * Encapsulation
 	
-###Lessons Learned
+### Lessons Learned
 
