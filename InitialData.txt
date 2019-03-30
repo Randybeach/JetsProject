@@ -1,1 +1,9 @@
-F22,price,speed,range
+Cargo,Dreamlifter,400,4000,10200000
+Cargo,C-5 Galaxy,420,5200,11404500
+Fighter,F-16,1500,2600,14500000
+Fighter,F-22,1498,1831,150740123
+Fighter,MiG-27,1171,1587,8300899
+CropDuster,Cessna,121,350,20000
+CropDuster,Kruk,99,450,6599
+CropDuster,Dromader,140,621,76321
+
