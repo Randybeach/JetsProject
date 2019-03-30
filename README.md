@@ -4,6 +4,7 @@
 
 ### Overview
 This program simulates an airfield. The airfield is originally populated using a .txt file and gives the users an option to add or remove aircraft and save the aircraft to a new file. 
+Start the program by running the JetsApp class and follow the user menu. 
 
 
 
