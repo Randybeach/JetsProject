@@ -5,17 +5,25 @@ public abstract class Jet {
 	private double speed;
 	private int range;
 	private long price;
+	private String type;
+	private double mach;
 	
 	public Jet() {
 		super();
 	}
 
-	public Jet(String model, double speed, int range, long price) {
+	public Jet(String type, String model, double speed, int range, long price) {
 		super();
 		this.model = model;
 		this.speed = speed;
 		this.range = range;
 		this.price = price;
+		this.type = type;
+	}
+	
+
+	public String getType() {
+		return type;
 	}
 
 	public String getModel() {
@@ -51,8 +59,8 @@ public abstract class Jet {
 	}
 	
 	public double getSpeedInMach() {
-		
-		return 0.00;
+		mach = 0.001303 * this.speed;
+		return mach;
 	}
 	
 	public void fly() {

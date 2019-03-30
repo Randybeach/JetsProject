@@ -1,9 +1,8 @@
-Cargo,Dreamlifter,400,4000,10200000
-Cargo,C-5 Galaxy,420,5200,11404500
-Fighter,F-16,1500,2600,14500000
-Fighter,F-22,1498,1831,150740123
-Fighter,MiG-27,1171,1587,8300899
-CropDuster,Cessna,121,350,20000
-CropDuster,Kruk,99,450,6599
-CropDuster,Dromader,140,621,76321
-
+CargoPlane,Dreamlifter,400.0,4000,10200000
+CargoPlane,C-5 Galaxy,420.0,5200,11404500
+FighterPlane,F-16,1500.0,2600,14500000
+FighterPlane,F-22,1498.0,1831,150740123
+FighterPlane,MiG-27,1171.0,1587,8300899
+CropPlane,Cessna,121.0,350,20000
+CropPlane,Kruk,99.0,450,6599
+CropPlane,Dromader,140.0,621,76321

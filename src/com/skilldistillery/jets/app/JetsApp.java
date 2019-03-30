@@ -17,7 +17,7 @@ public class JetsApp {
 
 	private void launch() {
 		airfield = new Airfield();
-		
+
 		displayUserMenu();
 	}
 
@@ -26,18 +26,20 @@ public class JetsApp {
 		int choice = 0;
 		boolean correct = false;
 		do {
-			while(!correct) {
-			try {
-				printMenu();
-				choice = sc.nextInt();
-				
-				if(choice <= 9 && choice >= 1) {
-					correct = true;
+			while (!correct) {
+				try {
+					printMenu();
+					choice = sc.nextInt();
+
+					if (choice <= 10 && choice >= 1) {
+						correct = true;
+					}else {
+						System.err.println("Between 1-10 please");
+					}
+				} catch (InputMismatchException e) {
+					System.err.println("Enter a number from 1-10.");
+					sc.nextLine();
 				}
-			} catch (InputMismatchException e) {
-				System.err.println("Enter a number from 1-9.");
-				sc.nextLine();
-			}
 			}
 			switch (choice) {
 			case 1:
@@ -53,7 +55,7 @@ public class JetsApp {
 				airfield.displayLongestRange();
 				break;
 			case 5:
-				airfield.displayCargoJets();
+				airfield.loadCargoJets();
 				break;
 			case 6:
 				airfield.fight();
@@ -65,6 +67,9 @@ public class JetsApp {
 				removePlane();
 				break;
 			case 9:
+				savePlane();
+				break;
+			case 10:
 				go = false;
 				break;
 
@@ -77,21 +82,27 @@ public class JetsApp {
 	private void printMenu() {
 		System.out.println(
 				"\n1. List fleet\n2. Fly all jets\n3. View fastest jet\n4. View jet with longest range\n5. Load all cargo jets"
-						+ "\n6. Dogfight!!\n7. Add a jet to fleet\n8. Remove a jet from fleet \n9. Quit");
+						+ "\n6. Dogfight!!\n7. Add a jet to fleet\n8. Remove a jet from fleet \n9. Save fleet to file\n10. Quit");
 	}
-	
+
 	private void addPlane() {
-		int choice=0;
+		int choice = 0;
 		String model = "";
+		String type;
 		Double speed = 0.00;
 		Integer range = 0;
-		Long price = (long)000;
+		Long price = (long) 000;
 		boolean correct = false;
-		while(!correct) {
+		while (!correct) {
 			try {
-				System.out.println("What type are you adding?\n1. Cargo\n2. Fighter\n3. Crop Duster\n4. Go Back");
+				System.out.println("What type are you adding?\n1. Cargo\n2. Fighter\n3. Crop Duster\n4. Other Plane\n5. Go Back");
 				choice = sc.nextInt();
-				if(choice > 0 && choice < 5) {
+				sc.nextLine();
+				if(choice == 5) {
+					System.out.println("Back to menu");
+					return;
+				}
+				if (choice > 0 && choice < 5) {
 					correct = true;
 				}
 			} catch (InputMismatchException e) {
@@ -100,11 +111,11 @@ public class JetsApp {
 			}
 		}
 		correct = false;
-		while(!correct) {
+		while (!correct) {
 			try {
 				System.out.println("What is the model");
-				model = sc.next();
-				if(model instanceof String) {
+				model = sc.nextLine();
+				if (model instanceof String) {
 					correct = true;
 				}
 			} catch (InputMismatchException e) {
@@ -113,11 +124,11 @@ public class JetsApp {
 			}
 		}
 		correct = false;
-		while(!correct) {
+		while (!correct) {
 			try {
 				System.out.println("What is the speed?");
 				speed = sc.nextDouble();
-				if(speed instanceof Double) {
+				if (speed instanceof Double) {
 					correct = true;
 				}
 			} catch (InputMismatchException e) {
@@ -126,11 +137,11 @@ public class JetsApp {
 			}
 		}
 		correct = false;
-		while(!correct) {
+		while (!correct) {
 			try {
 				System.out.println("What is the range?");
 				range = sc.nextInt();
-				if(range instanceof Integer) {
+				if (range instanceof Integer) {
 					correct = true;
 				}
 			} catch (InputMismatchException e) {
@@ -139,11 +150,11 @@ public class JetsApp {
 			}
 		}
 		correct = false;
-		while(!correct) {
+		while (!correct) {
 			try {
 				System.out.println("What is the price?");
 				price = sc.nextLong();
-				if(price instanceof Long) {
+				if (price instanceof Long) {
 					correct = true;
 				}
 			} catch (Exception e) {
@@ -151,24 +162,41 @@ public class JetsApp {
 				sc.nextLine();
 			}
 		}
-		switch(choice) {
-		case 1: airfield.addCargo(model, speed, range, price);break;
-		case 2: airfield.addFighter(model, speed, range, price);break;
-		case 3: airfield.addCropPlane(model, speed, range, price);break;
-		case 4: System.out.println("Back to menu");
-		default:
+		switch (choice) {
+		case 1:
+			type = "CargoPlane";
+			airfield.addCargo(type, model, speed, range, price);
+			System.out.println("Added");
+			break;
+		case 2:
+			type = "FighterPlane";
+			airfield.addFighter(type, model, speed, range, price);
+			System.out.println("Added");
+			break;
+		case 3:
+			type = "CropPlane";
+			airfield.addCropPlane(type, model, speed, range, price);
+			System.out.println("Added");
+			break;
+		case 4:
+			type = "OtherPlane";
+			airfield.addOtherPlane(type, model, speed, range, price);
+			System.out.println("Added");
+			break;
 		}
+		
 	}
-	
+
 	private void removePlane() {
+
 		boolean correct = false;
 		Integer choice = 0;
-		while(!correct) {
+		while (!correct) {
 			try {
 				airfield.printListOfInventory();
 				System.out.println("Which jet above do you want to remove?");
 				choice = sc.nextInt();
-				if(choice instanceof Integer) {
+				if (choice instanceof Integer) {
 					correct = true;
 				}
 			} catch (InputMismatchException e) {
@@ -176,22 +204,50 @@ public class JetsApp {
 				sc.nextLine();
 			}
 		}
-		System.out.print("Are you sure you want to remove ");
+		if(airfield.jetsSize() >= choice && choice > 0) {
+		System.out.print("Are you sure you want to remove the ");
 		airfield.getJet(choice-1);
 		correct = false;
-		while(!correct) {
-			
-		try {
-			String choiceString = sc.next();
-			if(choiceString.equalsIgnoreCase("yes")) {
-				airfield.removePlane(choice -1);
-				System.out.println("Plane removed");
-				correct = true;
+		while (!correct) {
+
+			try {
+				String choiceString = sc.next();
+				if (choiceString.equalsIgnoreCase("yes")) {
+					airfield.removePlane(choice - 1);
+					System.out.println("Plane removed");
+					correct = true;
+				}else {
+					System.out.println("Returning to menu. Removal unaccepted.");
+					return;
+				}
+			} catch (InputMismatchException e) {
+				System.err.println("Enter yes to remove aircraft or no to return to menu.");
 			}
-		} catch (InputMismatchException e) {
-			System.err.println("Enter yes to remove aircraft or no to return to menu.");
 		}
+		}else {
+			System.out.println("That jet doesn't exist. Returning to menu");
 		}
+		
 	}
 
+	public void savePlane() {
+		boolean tryAgain = true;
+		while (tryAgain) {
+			System.out.println("What do you want the name of the file");
+			String fileName = sc.next();
+			if (fileName.equals(airfield.getFileName())) {
+				System.out.println("file already exits. Try again");
+				continue;
+
+			}
+			if (fileName.endsWith(".txt")) {
+				airfield.savePlane(fileName);
+				System.out.println("Success");
+				tryAgain = false;
+			}else {
+				System.out.println("file needs .txt at the end");
+			}
+
+		}
+	}
 }

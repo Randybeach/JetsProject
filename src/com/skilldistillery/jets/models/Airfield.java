@@ -2,13 +2,16 @@ package com.skilldistillery.jets.models;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Airfield {
 	private List<Jet> jets;
-	private String fileName = "./InitialData.txt";
+	private String fileName = "InitialData.txt";
 
 	public Airfield() {
 		jets = populateAirfield(fileName);
@@ -25,19 +28,22 @@ public class Airfield {
 			String line;
 			while ((line = br.readLine()) != null) {
 				String[] jetInfo = line.split(",");
-				if (jetInfo[0].equalsIgnoreCase("Cargo")) {
-					Jet jet = new CargoPlane(jetInfo[1], Double.parseDouble(jetInfo[2]), Integer.parseInt(jetInfo[3]),
+				if (jetInfo[0].equalsIgnoreCase("CargoPlane")) {
+					Jet jet = new CargoPlane(jetInfo[0],jetInfo[1], Double.parseDouble(jetInfo[2]), Integer.parseInt(jetInfo[3]),
 							Long.parseLong(jetInfo[4]));
 					jet1.add(jet);
-				} else if (jetInfo[0].equalsIgnoreCase("Fighter")) {
-					Jet jet = new FighterPlane(jetInfo[1], Double.parseDouble(jetInfo[2]), Integer.parseInt(jetInfo[3]),
+				} else if (jetInfo[0].equalsIgnoreCase("FighterPlane")) {
+					Jet jet = new FighterPlane(jetInfo[0],jetInfo[1], Double.parseDouble(jetInfo[2]), Integer.parseInt(jetInfo[3]),
 							Long.parseLong(jetInfo[4]));
 					jet1.add(jet);
-				} else if (jetInfo[0].equalsIgnoreCase("CropDuster")) {
-					Jet jet = new CropPlane(jetInfo[1], Double.parseDouble(jetInfo[2]), Integer.parseInt(jetInfo[3]),
+				} else if (jetInfo[0].equalsIgnoreCase("CropPlane")) {
+					Jet jet = new CropPlane(jetInfo[0], jetInfo[1], Double.parseDouble(jetInfo[2]), Integer.parseInt(jetInfo[3]),
 							Long.parseLong(jetInfo[4]));
 					jet1.add(jet);
-
+				}else {
+					Jet jet = new OtherPlane(jetInfo[0], jetInfo[1], Double.parseDouble(jetInfo[2]), Integer.parseInt(jetInfo[3]),
+							Long.parseLong(jetInfo[4]));
+					jet1.add(jet);
 				}
 			}
 			br.close();
@@ -52,17 +58,21 @@ public class Airfield {
 
 	}
 
-	public void addCargo(String model, double speed, int range, long price) {
-		CargoPlane cp = new CargoPlane(model, speed, range, price);
+	public void addCargo(String type, String model, double speed, int range, long price) {
+		CargoPlane cp = new CargoPlane(type, model, speed, range, price);
 		jets.add(cp);
 	}
-	public void addFighter(String model, double speed, int range, long price) {
-		FighterPlane fp = new FighterPlane(model, speed, range, price);
+	public void addFighter(String type, String model, double speed, int range, long price) {
+		FighterPlane fp = new FighterPlane(type, model, speed, range, price);
 		jets.add(fp);
 	}
-	public void addCropPlane(String model, double speed, int range, long price) {
-		CropPlane cp = new CropPlane(model, speed, range, price);
+	public void addCropPlane(String type, String model, double speed, int range, long price) {
+		CropPlane cp = new CropPlane(type, model, speed, range, price);
 		jets.add(cp);
+	}
+	public void addOtherPlane(String type, String model, double speed, int range, long price) {
+		OtherPlane op = new OtherPlane(type, model, speed, range, price);
+		jets.add(op);
 	}
 
 	@Override
@@ -80,15 +90,17 @@ public class Airfield {
 		String model = "";
 		long price = 0;
 		int range = 0;
+		double mach = 0.0;
 		for(Jet jet: jets) {
 			if(jet.getSpeed() > fastestSpeed) {
 				fastestSpeed = jet.getSpeed();
 				model = jet.getModel();
 				price = jet.getPrice();
 				range = jet.getRange();
+				mach = jet.getSpeedInMach();
 			}
 		}
-		System.out.println("The fastest aircraft at our airfield, the " + model + ", can go " + fastestSpeed + " MPH for " + range + " miles and costs $" + price);
+		System.out.println("The fastest aircraft at our airfield, the " + model + ", can go " + fastestSpeed + " MPH (mach " + mach + ") for " + range + " miles and costs $" + price);
 	}
 	
 	public void displayLongestRange() {
@@ -108,7 +120,7 @@ public class Airfield {
 		
 	}
 	
-	public void displayCargoJets() {
+	public void loadCargoJets() {
 		for(Jet jet : jets) {
 			if(jet instanceof CargoPlane) {
 				System.out.print(jet.getModel() + " ");
@@ -144,6 +156,34 @@ public class Airfield {
 		System.out.println(jets.get(index));
 	}
 
+	public void savePlane(String fileName) {
+		
+		try {
+			FileOutputStream fr = new FileOutputStream(fileName);
+			PrintWriter pw = new PrintWriter(fr);
+			System.out.println("Trying to populate file");
+			for (Jet jet : jets) {
+				String type = jet.getType();
+				String model = jet.getModel();
+				double speed = jet.getSpeed();
+				int range = jet.getRange();
+				long price = jet.getPrice();
+				pw.println(type + "," + model + "," + speed + "," + range + "," + price);
+				
+			}
+			System.out.println("All planes saved to file.");
+			pw.close();
+		}catch(IOException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+	public int jetsSize() {
+		return jets.size();
+	}
 	
 	
 }

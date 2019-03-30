@@ -9,8 +9,8 @@ public class CropPlane extends Jet implements SprayReady {
 		// TODO Auto-generated constructor stub
 	}
 
-	public CropPlane(String model, double speed, int range, long price) {
-		super(model, speed, range, price);
+	public CropPlane(String type, String model, double speed, int range, long price) {
+		super(type, model, speed, range, price);
 		// TODO Auto-generated constructor stub
 	}
 
